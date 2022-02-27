@@ -1,5 +1,4 @@
 from src.config import Operacao
-from src.perceptron import Resultado
 from src.services import RedeNeuralService
 
 
@@ -9,14 +8,13 @@ class Interface:
     de operação realizada.
     """
     user_option: Operacao
-    rede_neural_serive: RedeNeuralService
+    rede_neural_serive = RedeNeuralService()
 
     def run(self):
-        self.user_option: Operacao = self.get_opcao_do_usuario()
-        self.rede_neural_serive = RedeNeuralService(self.user_option)
+        self.user_option = self.get_opcao_do_usuario()
 
         a, b = self.get_valores_do_usuario()
-        result = self.rede_neural_serive.validar(a, b)
+        result = self.rede_neural_serive.validar(a, b, self.user_option)
         self.show_resultado(result)
 
     def menu(self):
@@ -31,11 +29,12 @@ class Interface:
 
     def get_opcao_do_usuario(self) -> Operacao:
         """
-        Retorna a respectiva Operacao selecionada pelo usuário
+        Retorna a respectiva Operacao selecionada pelo usuário,
+        será solicitado enquanto o usuário não digitar uma opção válida
         """
 
         def get_input():
-            print(self.menu())
+            print('\n' + self.menu())
             return int(input('Escolha uma opção: '))
 
         value = get_input()
@@ -50,5 +49,6 @@ class Interface:
                int(input('Digite o valor de B: '))
 
     def show_resultado(self, result):
+        """Mostra ao usuário o resultado do neurônio"""
         value = result.value
-        print('Resultado:', value)
+        print('Resultado: ', value)
